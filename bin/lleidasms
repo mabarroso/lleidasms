@@ -19,16 +19,15 @@ class SMS < Lleidasms::Gateway
     print "  from #{from}\r\n"
     print "  to #{to}\r\n"
     print "  sms #{sms}\r\n"
-    incomingmoack(id, label)
+    cmd_incomingmoack(id, label)
   end
 end
 
 
 sms = SMS.new
 sms.connect
-sms.login(ARGV[1], ARGV[2])
 sms.listener
-#sms.quit
+sms.cmd_login(ARGV[0], ARGV[1])
 
 while sms.conected?
 

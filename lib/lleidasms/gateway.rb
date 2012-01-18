@@ -50,7 +50,7 @@ module Lleidasms
     end
 
     def close
-      quit
+      cmd_quit
     end
 
     def close!
@@ -97,31 +97,31 @@ module Lleidasms
     end
 
     # CMD Generales
-    def login(user, password, label_response = new_label)
+    def cmd_login(user, password, label_response = new_label)
       $writer[label_response + " LOGIN #{user} #{password}"]
     end
 
-    def ping(time = Time.now.to_i.to_s, label_response = new_label)
+    def cmd_ping(time = Time.now.to_i.to_s, label_response = new_label)
       $writer[label_response + " PING "+ time]
     end
 
-    def pong(time = Time.now.to_i.to_s, label_response = new_label)
+    def cmd_pong(time = Time.now.to_i.to_s, label_response = new_label)
       $writer[label_response + " PONG "+ time]
     end
 
-    def saldo(label_response = new_label)
+    def cmd_saldo(label_response = new_label)
       $writer[label_response + " SALDO"]
     end
 
-    def infonum(numero, label_response = new_label)
+    def cmd_infonum(numero, label_response = new_label)
       $writer[label_response + " INFONUM #{numero}"]
     end
 
-    def tarifa(numero, label_response = new_label)
+    def cmd_tarifa(numero, label_response = new_label)
       $writer[label_response + " TARIFA #{numero}"]
     end
 
-    def quit(label_response = new_label)
+    def cmd_quit(label_response = new_label)
       $writer[label_response + " QUIT"]
     end
     # CMD Generales end
@@ -130,11 +130,11 @@ module Lleidasms
     # CMD Envios MT end
 
     # CMD Recepcion SMS (no premium)
-    def allowanswer(allow = true, label_response = new_label)
+    def cmd_allowanswer(allow = true, label_response = new_label)
       $writer[label_response + " ALLOWANSWER " + (allow ? 'ON' : 'OFF')]
     end
 
-    def incomingmoack(m_id, label_response = new_label)
+    def cmd_incomingmoack(m_id, label_response = new_label)
       $writer[label_response + " INCOMINGMOACK #{m_id}"]
     end
     # CMD Recepcion SMS (no premium) end
@@ -156,9 +156,9 @@ module Lleidasms
 				when 'NOOK'
 				when 'RSALDO'
 				when 'PING'
-				  pong @args[0], @label
+				  cmd_pong @args[0], @label
 				when 'PONG'
-				  ping @args[0], @label
+				  cmd_ping @args[0], @label
 				when 'RINFONUM'
 				when 'RTARIFA'
 				when 'BYE'

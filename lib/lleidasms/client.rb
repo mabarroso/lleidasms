@@ -7,8 +7,8 @@ module Lleidasms
 
     def connect(user, password)
     	super()
-      login(user, password)
     	listener
+      cmd_login(user, password)
     end
 
     def new_event(label, cmd, args)
@@ -31,8 +31,8 @@ module Lleidasms
     	end
     end
 
-		def saldo?(wait = true)
-			saldo
+		def saldo(wait = true)
+			cmd_saldo
 			wait_for(last_label) if wait
 			return @response_args[0]
 		end
