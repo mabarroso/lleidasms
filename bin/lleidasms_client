@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+root = File.expand_path('../..', __FILE__)
+require File.join(root, %w[lib lleidasms])
+
+require "../lib/lleidasms/client"
+
+
+
+sms = Lleidasms::Client.new
+sms.connect(ARGV[1], ARGV[2])
+puts sms.saldo?
+sms.close

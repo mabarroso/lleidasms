@@ -1,65 +1,48 @@
-require "thread"
-require "socket"
-require "io/wait"
+$:.unshift File.dirname(__FILE__)
+require "gateway"
 
 module Lleidasms
-  module Client
-    attr_accessor :host, :port
+  class Client < Lleidasms::Gateway
+		event :ALL, :new_event
 
-    def initialize(host = 'sms.lleida.net', port = 2048)
-      @host = host
-      @port = port
-      @label = 0
+    def connect(user, password)
+    	super()
+      login(user, password)
+    	listener
+    end
 
-      # prepare global (scriptable) data
-      $conected      = false
-      $input_buffer  = Queue.new
-      $output_buffer = String.new
-
-      $reader      = lambda do |line|
-      	$input_buffer << line.strip
-      	parser
-      end
-      $writer      = lambda do |buffer|
-      	$server.puts "#{buffer}\r\n"
-      	puts "<#{buffer}\r\n"
-      	buffer.replace("")
+    def new_event(label, cmd, args)
+    	@event_label = label
+    	@event_cmd   = cmd
+    	@event_args  = args
+      if @wait_for_label.eql? @event_label
+        @wait = false
+      	@response_label = label
+      	@response_cmd   = cmd
+      	@response_args  = args
       end
     end
 
-    def conected?
-      $conected
+    def wait_for(label)
+      @wait_for_label = label.to_s
+      @wait = true
+    	while @wait do
+        # sleep 0.1
+    	end
     end
 
-    def connect
-      begin
-      	$server = TCPSocket.new(@host, @port)
-      	$conected = true
-      rescue
-        $conected = false
-      	puts "Unable to open a connection."
-      end
-    end
+		def saldo?(wait = true)
+			saldo
+			wait_for(last_label) if wait
+			return @response_args[0]
+		end
 
-    def close!
-      $server.close
-      $conected = false
-    end
 
-    def listener
-      Thread.new($server) do |socket|
-      	while line = socket.gets
-      		$reader[line]
-      	end
-      end
-    end
+		def send_sms(wait = true)
+			saldo
+			wait_for(last_label) if wait
+		end
 
-		def parser
-			until $input_buffer.empty?
-				line = $input_buffer.shift
-				puts ">#{line}\r\n"
-			end
-    end
 
   end
 end

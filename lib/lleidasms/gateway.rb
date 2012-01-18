@@ -1,18 +1,14 @@
-$:.unshift File.dirname(__FILE__)
-require "callbacks"
-require "client"
+require "thread"
+require "socket"
+require "io/wait"
 
 module Lleidasms
   class Gateway
-    extend Callbacks
-
     # Client
-    attr_accessor :host, :port
-
     def initialize(host = 'sms.lleida.net', port = 2048)
       @host = host
       @port = port
-      @label = 0
+      @my_label = 0
 
       # prepare global (scriptable) data
       $conected      = false
@@ -30,10 +26,6 @@ module Lleidasms
       end
     end
 
-    def conected?
-      $conected
-    end
-
     def connect
       begin
       	$server = TCPSocket.new(@host, @port)
@@ -41,12 +33,8 @@ module Lleidasms
       rescue
         $conected = false
       	puts "Unable to open a connection."
+      	exit
       end
-    end
-
-    def close!
-      $server.close
-      $conected = false
     end
 
     def listener
@@ -56,59 +44,103 @@ module Lleidasms
       	end
       end
     end
-    # Client end
+
+    def conected?
+      $conected
+    end
 
     def close
       quit
     end
 
-    def label
-      @label += 1
-      @label.to_s
+    def close!
+      $server.close
+      $conected = false
+    end
+    # Client end
+
+    # Callbacks
+    $callbacks = {}
+
+ 	  def self.event(name, method_name)
+ 	  	$callbacks[name] = [] unless $callbacks[name]
+      $callbacks[name] << method_name
+		end
+
+		def do_event(name)
+			run_event name.to_sym, @label, @cmd, @args
+		end
+
+		def run_event(name, *args)
+      run_event_for(name.to_sym, self, *args)
+    end
+
+    def run_event_for(name, scope, *args)
+    	return unless $callbacks[name.to_sym]
+      $callbacks[name.to_sym].each do |callback|
+        if callback.kind_of? Symbol
+          scope.send(callback, *args)
+        else
+          scope.instance_exec(*args, &callback)
+        end
+      end
+    end
+    # Callbacks end
+
+    def new_label
+      @my_label += 1
+      @my_label.to_s
+    end
+
+    def last_label
+      @my_label
     end
 
     # CMD Generales
-    def login(user, password, label_response = label)
+    def login(user, password, label_response = new_label)
       $writer[label_response + " LOGIN #{user} #{password}"]
     end
 
-    def ping(time = Time.now.to_i.to_s, label_response = label)
+    def ping(time = Time.now.to_i.to_s, label_response = new_label)
       $writer[label_response + " PING "+ time]
     end
 
-    def pong(time = Time.now.to_i.to_s, label_response = label)
+    def pong(time = Time.now.to_i.to_s, label_response = new_label)
       $writer[label_response + " PONG "+ time]
     end
 
-    def saldo(label_response = label)
+    def saldo(label_response = new_label)
       $writer[label_response + " SALDO"]
     end
 
-    def infonum(numero, label_response = label)
+    def infonum(numero, label_response = new_label)
       $writer[label_response + " INFONUM #{numero}"]
     end
 
-    def tarifa(numero, label_response = label)
+    def tarifa(numero, label_response = new_label)
       $writer[label_response + " TARIFA #{numero}"]
     end
 
-    def quit(label_response = label)
+    def quit(label_response = new_label)
       $writer[label_response + " QUIT"]
     end
+    # CMD Generales end
 
     # CMD Envios MT
+    # CMD Envios MT end
 
     # CMD Recepcion SMS (no premium)
-    def allowanswer(allow = true, label_response = label)
+    def allowanswer(allow = true, label_response = new_label)
       $writer[label_response + " ALLOWANSWER " + (allow ? 'ON' : 'OFF')]
     end
 
-    def incomingmoack(m_id, label_response = label)
+    def incomingmoack(m_id, label_response = new_label)
       $writer[label_response + " INCOMINGMOACK #{m_id}"]
     end
+    # CMD Recepcion SMS (no premium) end
 
     # CMD Recepcion SMS (premium)
-
+    # CMD Recepcion SMS (premium) end
 
 		def parser
 			until $input_buffer.empty?
@@ -135,12 +167,14 @@ module Lleidasms
 
         # CMD Recepcion SMS (no premium)
         when 'INCOMINGMO'
+
         # CMD Recepcion SMS (premium)
+
 				else
-          #	CMD unknow
+          # unknow
 				end
-				run_event(@cmd, @label, @cmd, @args)
-				run_event(:ALL, @label, @cmd, @args)
+				do_event(@cmd)
+				do_event(:ALL)
 			end
 		end
   end
