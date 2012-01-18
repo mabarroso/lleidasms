@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+root = File.expand_path('../..', __FILE__)
+require File.join(root, %w[lib lleidasms])
+
+require "../lib/lleidasms/gateway"
+
+class SMS < Lleidasms::Gateway
+  event :INCOMINGMO, :new_sms
+
+  def new_sms(label, cmd, args)
+    id    = args.shift
+    time  = args.shift
+    from  = args.shift
+    to    = args.shift
+    sms   = args.join(' ')
+    print "  id #{id}\r\n"
+    print "  time #{time}\r\n"
+    print "  from #{from}\r\n"
+    print "  to #{to}\r\n"
+    print "  sms #{sms}\r\n"
+    incomingmoack(id, label)
+  end
+end
+
+
+sms = SMS.new
+sms.connect
+sms.login(ARGV[1], ARGV[2])
+sms.listener
+#sms.quit
+
+while sms.conected?
+
+end
