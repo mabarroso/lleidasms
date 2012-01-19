@@ -42,6 +42,7 @@ module Lleidasms
       	while line = socket.gets
       		$reader[line]
       	end
+      	close!
       end
     end
 
