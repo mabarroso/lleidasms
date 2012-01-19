@@ -1,12 +1,17 @@
-require 'rake'
-require 'rake/testtask'
 
-desc 'Default: run unit tests.'
-task :default => :test
-
-desc 'Test the lleidasms plugin.'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'test'
-  test.test_files = FileList['test/*_test.rb']
-  test.verbose = true
+begin
+  require 'bones'
+rescue LoadError
+  abort '### Please install the "bones" gem ###'
 end
+
+task :default => 'test:run'
+task 'gem:release' => 'test:run'
+
+Bones {
+  name     'lleidasms'
+  authors  'FIXME (who is writing this software)'
+  email    'FIXME (your e-mail)'
+  url      'FIXME (project homepage)'
+}
+
