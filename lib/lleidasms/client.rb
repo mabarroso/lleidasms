@@ -11,6 +11,24 @@ module Lleidasms
       cmd_login(user, password)
     end
 
+		def saldo()
+			cmd_saldo
+			wait_for(last_label)
+			return @response_args[0]
+		end
+
+		def tarifa(numero)
+			cmd_tarifa numero
+			wait_for(last_label)
+			return @response_args
+		end
+
+		def send_sms(wait = true)
+			saldo
+			wait_for(last_label) if wait
+		end
+
+    private
     def new_event(label, cmd, args)
     	@event_label = label
     	@event_cmd   = cmd
@@ -30,18 +48,6 @@ module Lleidasms
         # sleep 0.1
     	end
     end
-
-		def saldo(wait = true)
-			cmd_saldo
-			wait_for(last_label) if wait
-			return @response_args[0]
-		end
-
-
-		def send_sms(wait = true)
-			saldo
-			wait_for(last_label) if wait
-		end
 
 
   end
