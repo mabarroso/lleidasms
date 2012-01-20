@@ -1,32 +1,38 @@
 lleidasms
 ===========
 
-FIXME (describe your package)
+Lleida.net SMS gateway for Ruby
 
 Features
 --------
 
-* FIXME (list of features and unsolved problems)
+Enhancements
+  - client class
+  - gateway superclass for new client implementations
 
 Examples
 --------
 
-    FIXME (code sample of usage)
+  sms = Lleidasms::Client.new
+  sms.connect(<YOUR USER>, <YOUR PASSWORD>)
+  puts sms.saldo
+  sms.close
+
 
 Requirements
 ------------
 
-* FIXME (list of requirements)
+none
 
 Install
 -------
 
-* FIXME (sudo gem install, anything else)
+sudo gem install lleidasms
 
 Author
 ------
 
-Original author: FIXME (author's name)
+Original author: Miguel Adolfo Barroso
 
 Contributors:
 
@@ -36,9 +42,9 @@ Contributors:
 License
 -------
 
-(The MIT License) FIXME (different license?)
+(The MIT License)
 
-Copyright (c) 2012 FIXME (author's name)
+Copyright (c) 2012 Miguel Adolfo Barroso
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

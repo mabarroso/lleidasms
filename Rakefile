@@ -10,8 +10,8 @@ task 'gem:release' => 'test:run'
 
 Bones {
   name     'lleidasms'
-  authors  'FIXME (who is writing this software)'
-  email    'FIXME (your e-mail)'
-  url      'FIXME (project homepage)'
+  authors  'Miguel Adolfo Barroso'
+  email    'mabarroso@mabarroso.com'
+  url      'http://www.mabarroso.com/lleidasms'
 }
 

@@ -3,7 +3,7 @@
 root = File.expand_path('../..', __FILE__)
 require File.join(root, %w[lib lleidasms])
 
-require "../lib/lleidasms/gateway"
+require "gateway"
 
 class SMS < Lleidasms::Gateway
   event :INCOMINGMO, :new_sms
