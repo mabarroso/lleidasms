@@ -1,17 +1,37 @@
-
+#!/usr/bin/env rake
 begin
-  require 'bones'
+  require 'bundler/setup'
 rescue LoadError
-  abort '### Please install the "bones" gem ###'
+  puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
+end
+begin
+  require 'rdoc/task'
+rescue LoadError
+  require 'rdoc/rdoc'
+  require 'rake/rdoctask'
+  RDoc::Task = Rake::RDocTask
 end
 
-task :default => 'test:run'
-task 'gem:release' => 'test:run'
+RDoc::Task.new(:rdoc) do |rdoc|
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title    = 'Lleidasms'
+  rdoc.options << '--line-numbers'
+  rdoc.rdoc_files.include('README.rdoc')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+end
 
-Bones {
-  name     'lleidasms'
-  authors  'Miguel Adolfo Barroso'
-  email    'mabarroso@mabarroso.com'
-  url      'http://www.mabarroso.com/lleidasms'
-}
 
+
+Bundler::GemHelper.install_tasks
+
+require 'rake/testtask'
+
+Rake::TestTask.new(:test) do |t|
+  t.libs << 'lib'
+  t.libs << 'test'
+  t.pattern = 'test/**/*_test.rb'
+  t.verbose = false
+end
+
+
+task :default => :test
