@@ -5,21 +5,24 @@ module Lleidasms
   class Client < Lleidasms::Gateway
 		event :ALL, :new_event
 
-    def connect(user, password)
+    attr_accessor :timeout
+
+    def connect(user, password, timeout = 2.4)
     	super()
     	listener
       cmd_login(user, password)
+      self.timeout= timeout
     end
 
 		def saldo()
 			cmd_saldo
-			wait_for(last_label)
+			return false unless wait_for(last_label)
 			return @response_args[0]
 		end
 
 		def tarifa(numero)
 			cmd_tarifa numero
-			wait_for(last_label)
+			return false unless wait_for(last_label)
 			return @response_args
 		end
 
@@ -44,11 +47,13 @@ module Lleidasms
     def wait_for(label)
       @wait_for_label = label.to_s
       @wait = true
+      t = Time.new
     	while @wait do
-        # sleep 0.1
+         sleep 0.2
+         return false if @timeout < (Time.new - t)
     	end
+    	return true
     end
-
 
   end
 end
