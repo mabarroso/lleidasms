@@ -4,5 +4,7 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile ~/.gitignore_global
 
-/bin/security
-/bin/security_client
+bin/security
+bin/security_client
+pkg/
+
