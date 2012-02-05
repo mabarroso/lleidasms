@@ -28,17 +28,13 @@ none
 Install
 -------
 
-sudo gem install lleidasms
+gem install lleidasms
 
 Author
 ------
 
 Original author: Miguel Adolfo Barroso
 
-Contributors:
-
-* FIXME (contributor 1?)
-* FIXME (contributor 2?)
 
 License
 -------
