@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = "Receive and send standar and premium SMS/MMS using Lleida.net services."
   s.executables = ["lleidasms", "lleidasms_client"]
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["test/**/*"]
 
   s.add_development_dependency "rspec", "~> 2.7.0"
