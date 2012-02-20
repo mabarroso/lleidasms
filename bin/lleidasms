@@ -8,18 +8,18 @@ require "gateway"
 class SMS < Lleidasms::Gateway
   event :INCOMINGMO, :new_sms
 
-  def new_sms(label, cmd, args)
+  def new_sms label, cmd, args
     id    = args.shift
     time  = args.shift
     from  = args.shift
     to    = args.shift
     sms   = args.join(' ')
-    print "  id #{id}\r\n"
-    print "  time #{time}\r\n"
-    print "  from #{from}\r\n"
-    print "  to #{to}\r\n"
-    print "  sms #{sms}\r\n"
-    cmd_incomingmoack(id, label)
+    puts "  id #{id}"
+    puts "  time #{time}"
+    puts "  from #{from}"
+    puts "  to #{to}"
+    puts "  sms #{sms}"
+    cmd_incomingmoack id, label
   end
 end
 
@@ -27,7 +27,7 @@ end
 sms = SMS.new
 sms.connect
 sms.listener
-sms.cmd_login(ARGV[0], ARGV[1])
+sms.cmd_login ARGV[0], ARGV[1]
 
 while sms.conected?
 

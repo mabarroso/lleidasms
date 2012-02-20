@@ -8,6 +8,6 @@ require "client"
 
 
 sms = Lleidasms::Client.new
-sms.connect(ARGV[0], ARGV[1])
+sms.connect ARGV[0], ARGV[1]
 puts sms.saldo
 sms.close
