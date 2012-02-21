@@ -2,7 +2,7 @@
 
 ## Lleidasms 1.1.0
 - Client class features
-  * send SMS
+  * send SMS text plain and binary (base64) format
 
 ## Lleidasms 1.0.2
 

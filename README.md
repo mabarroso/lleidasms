@@ -7,12 +7,12 @@ Receive and send standar and premium SMS/MMS using [Lleida.net](http://lleida.ne
 ##Features
   - client class
   - gateway superclass for new client implementations
-##Protocol implementation (15%)
+##Protocol implementation (20%)
   - Comandos Generales (100%)
   	* implemented: saldo, ping, pong, infonum, tarifa, quit.
-  - Comandos para el envíıo de MT simples (0%)
-  	* implemented: none
-  	* TODO: submit, bsubmit, usubmit, fsubmit, fbsubmit, fusubmit, dsubmit, dbsubmit, dusubmit, dfsubmit, dbfsubmit, dfusubmit, waplink, dst, msg, filemsg, mmsmsg, envia, acuseon, acuseoff, acuse, acuseack, trans.
+  - Comandos para el envíıo de MT simples (9%)
+  	* implemented: submit, bsubmit
+  	* TODO: usubmit, fsubmit, fbsubmit, fusubmit, dsubmit, dbsubmit, dusubmit, dfsubmit, dbfsubmit, dfusubmit, waplink, dst, msg, filemsg, mmsmsg, envia, acuseon, acuseoff, acuse, acuseack, trans.
   - Comandos para la recepcion de SMS (NO Premium) (0%)
   	* implemented: none
   	* TODO: allowanswer, incomingmo, incomingmoack.

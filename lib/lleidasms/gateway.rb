@@ -114,12 +114,12 @@ module Lleidasms
       $writer[label_response + " SALDO"]
     end
 
-    def cmd_infonum(numero, label_response = new_label)
-      $writer[label_response + " INFONUM #{numero}"]
+    def cmd_infonum(number, label_response = new_label)
+      $writer[label_response + " INFONUM #{number}"]
     end
 
-    def cmd_tarifa(numero, label_response = new_label)
-      $writer[label_response + " TARIFA #{numero}"]
+    def cmd_tarifa(number, label_response = new_label)
+      $writer[label_response + " TARIFA #{number}"]
     end
 
     def cmd_quit(label_response = new_label)
@@ -128,6 +128,14 @@ module Lleidasms
     # CMD Generales end
 
     # CMD Envios MT
+    def cmd_submit(number, message, label_response = new_label)
+      $writer[label_response + " SUBMIT #{number} #{message}"]
+    end
+
+    def cmd_bsubmit(number, message, label_response = new_label)
+      $writer[label_response + " BSUBMIT #{number} #{message}"]
+    end
+
     # CMD Envios MT end
 
     # CMD Recepcion SMS (no premium)
@@ -150,7 +158,6 @@ module Lleidasms
 				@args = line.split(' ')
 				@label = @args.shift
 				@cmd   = @args.shift
-
 				case @cmd
 				# CMD Generales
 				when 'OK'
@@ -165,6 +172,8 @@ module Lleidasms
 				when 'BYE'
 					close!
         # CMD Envios MT
+        when 'SUBMITOK'
+        when 'BSUBMITOK'
 
         # CMD Recepcion SMS (no premium)
         when 'INCOMINGMO'

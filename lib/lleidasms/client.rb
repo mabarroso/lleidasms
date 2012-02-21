@@ -3,7 +3,7 @@ require "gateway"
 
 module Lleidasms
   class Client < Lleidasms::Gateway
-		event :ALL, :new_event
+		event :all, :new_event
 
     attr_accessor :timeout
 
@@ -20,15 +20,23 @@ module Lleidasms
 			return @response_args[0]
 		end
 
-		def tarifa(numero)
-			cmd_tarifa numero
+		def tarifa(number)
+			cmd_tarifa number
 			return false unless wait_for(last_label)
 			return @response_args
 		end
 
-		def send_sms(wait = true)
-			saldo
-			wait_for(last_label) if wait
+		def send_sms(number, message, is_binary = false, wait = true)
+			if is_binary
+				cmd_bsubmit number, message
+			else
+				cmd_submit number, message
+			end
+			if wait
+				wait_for(last_label)
+				return false if @response_cmd.eql? 'NOOK'
+				return "#{@response_args[0]}.#{@response_args[1]}".to_f
+			end
 		end
 
     private
