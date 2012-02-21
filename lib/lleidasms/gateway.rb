@@ -175,7 +175,7 @@ module Lleidasms
           # unknow
 				end
 				do_event(@cmd)
-				do_event(:ALL)
+				do_event(:all)
 			end
 		end
   end
