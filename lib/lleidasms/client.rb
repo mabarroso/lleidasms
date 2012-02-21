@@ -20,18 +20,38 @@ module Lleidasms
 			return @response_args[0]
 		end
 
+    # *number*
+    #   The telephone number
 		def tarifa(number)
 			cmd_tarifa number
 			return false unless wait_for(last_label)
 			return @response_args
 		end
 
-		def send_sms(number, message, is_binary = false, wait = true)
-			if is_binary
-				cmd_bsubmit number, message
-			else
-				cmd_submit number, message
+    # *number*
+    #   The telephone number
+    # *message*
+    #   The string to send
+    # *opts*
+    #   - wait: (default true) wait for response
+    #   - encode
+    #       * :ascii (default)
+    #       * :binary message is in base64 encoded
+    #       * :base64 message is in base64 encoded
+    #       * :unicode message is in unicode and base64 encoded
+		def send_sms(number, message, opts={})
+			wait   	=!(opts[:nowait] || false)
+			encode	=  opts[:encode] || :ascii
+
+			case encode
+				when :binary || :base64
+					cmd_bsubmit number, message
+				when :unicode
+					cmd_usubmit number, message
+				else # :ascii
+			  	cmd_submit number, message
 			end
+
 			if wait
 				wait_for(last_label)
 				return false if @response_cmd.eql? 'NOOK'

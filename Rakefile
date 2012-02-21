@@ -10,6 +10,5 @@ end
 
 desc "Generate docs"
 task :rdoc do
-  exec "rdoc --ri *.c lib/*.rb"
-  exec "rdoc"
+  exec "rdoc --all"
 end
