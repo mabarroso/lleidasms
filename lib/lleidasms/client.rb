@@ -79,7 +79,60 @@ module Lleidasms
 			end
 		end
 
+    # *number*
+    #   The telephone number
+    # *url*
+    #   The URL to content. Usually a image, tone or application
+    # *message*
+    #   Information text before downloading content
+		def send_waplink(number, url, message)
+      cmd_waplink number, url, message
+
+			if wait
+				wait_for(last_label)
+				return false if @response_cmd.eql? 'NOOK'
+				return "#{@response_args[0]}.#{@response_args[1]}".to_f
+			end
+		end
+
+    # Add telephone numbers into the massive send list.
+    # It is recommended not to send more than 50 in each call
+    #
+    # Return TRUE if ok
+    #   - see accepted in *last_addressees_accepted*
+    #   - see rejected in *last_addressees_rejected*
+		def add_addressee(addressees, wait = true)
+		  @addressees_accepted = false
+		  @addressees_rejected = false
+      if addressees.kind_of?(Array)
+        addressees = addressees.join(' ')
+      end
+
+      cmd_dst addressees
+
+      while wait && !@addressees_accepted
+        wait_for(last_label)
+        return false if !add_addressee_results()
+      end
+		end
+
+    def last_addressees_accepted
+      return @addressees_accepted
+    end
+
+    def last_addressees_rejected
+      return @addressees_rejected
+    end
+
     private
+    def add_addressee_results()
+puts "-- #{@response_cmd}"
+      return false if @response_cmd.eql? 'NOOK'
+      @addressees_rejected = @response_args if @response_cmd.eql? 'REJDST'
+      @addressees_accepted = @response_args if @response_cmd.eql? 'OK'
+      return true
+    end
+
     def new_event(label, cmd, args)
     	@event_label = label
     	@event_cmd   = cmd

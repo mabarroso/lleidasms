@@ -3,6 +3,8 @@
 ## Lleidasms 1.1.0
 - Client class features
   * send SMS text plain (ASCII), unicode and binary (base64) format
+  * send SMS waplink
+  * massive send list
 
 ## Lleidasms 1.0.2
 

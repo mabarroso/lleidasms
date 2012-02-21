@@ -156,6 +156,13 @@ module Lleidasms
       $writer[label_response + " FUSUBMIT #{number} #{message}"]
     end
 
+    def cmd_waplink(number, message, label_response = new_label)
+      $writer[label_response + " WAPLINK #{number} #{message}"]
+    end
+
+    def cmd_dst(numbers, label_response = new_label)
+      $writer[label_response + " DST #{numbers}"]
+    end
     # CMD Envios MT end
 
     # CMD Recepcion SMS (no premium)
@@ -198,6 +205,8 @@ module Lleidasms
         when 'FSUBMITOK'
         when 'FBSUBMITOK'
         when 'FUSUBMITOK'
+        when 'WAPLINKOK'
+        when 'REJDST'
 
         # CMD Recepcion SMS (no premium)
         when 'INCOMINGMO'
