@@ -97,6 +97,10 @@ module Lleidasms
       @my_label
     end
 
+    def cmd_raw(cmd, args, label_response = new_label)
+      $writer[label_response + " #{cmd} #{args}"]
+    end
+
     # CMD Generales
     def cmd_login(user, password, label_response = new_label)
       $writer[label_response + " LOGIN #{user} #{password}"]
@@ -134,6 +138,22 @@ module Lleidasms
 
     def cmd_bsubmit(number, message, label_response = new_label)
       $writer[label_response + " BSUBMIT #{number} #{message}"]
+    end
+
+    def cmd_usubmit(number, message, label_response = new_label)
+      $writer[label_response + " USUBMIT #{number} #{message}"]
+    end
+
+    def cmd_fsubmit(number, message, label_response = new_label)
+      $writer[label_response + " FSUBMIT #{number} #{message}"]
+    end
+
+    def cmd_fbsubmit(number, message, label_response = new_label)
+      $writer[label_response + " FBSUBMIT #{number} #{message}"]
+    end
+
+    def cmd_fusubmit(number, message, label_response = new_label)
+      $writer[label_response + " FUSUBMIT #{number} #{message}"]
     end
 
     # CMD Envios MT end
@@ -174,6 +194,10 @@ module Lleidasms
         # CMD Envios MT
         when 'SUBMITOK'
         when 'BSUBMITOK'
+        when 'USUBMITOK'
+        when 'FSUBMITOK'
+        when 'FBSUBMITOK'
+        when 'FUSUBMITOK'
 
         # CMD Recepcion SMS (no premium)
         when 'INCOMINGMO'

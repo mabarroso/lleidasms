@@ -34,23 +34,43 @@ module Lleidasms
     #   The string to send
     # *opts*
     #   - wait: (default true) wait for response
+    #   - sender: The sender telephone number
+    #   - date: Date and time to send message in format YYYYMMDDhhmm[+-]ZZzz
     #   - encode
     #       * :ascii (default)
     #       * :binary message is in base64 encoded
     #       * :base64 message is in base64 encoded
     #       * :unicode message is in unicode and base64 encoded
 		def send_sms(number, message, opts={})
-			wait   	=!(opts[:nowait] || false)
-			encode	=  opts[:encode] || :ascii
+			wait   	  =!(opts[:nowait] || false)
+			encode	  =  opts[:encode] || :ascii
+			sender	  =  opts[:sender] || false
+			datetime  =  opts[:date]   || false
 
 			case encode
 				when :binary || :base64
-					cmd_bsubmit number, message
+					encode = 'B'
 				when :unicode
-					cmd_usubmit number, message
+					encode = 'U'
 				else # :ascii
-			  	cmd_submit number, message
+			  	encode = ''
 			end
+
+			if sender
+			  sender = "#{sender} "
+			  custom = 'F'
+			else
+			  custom = ''
+			end
+
+			if datetime
+			  datetime = "#{datetime} "
+			  date = 'D'
+			else
+			  date = ''
+			end
+
+      cmd_raw "#{date}#{custom}#{encode}SUBMIT", "#{datetime}#{sender}#{number} #{message}"
 
 			if wait
 				wait_for(last_label)
