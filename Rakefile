@@ -7,3 +7,9 @@ desc "Run all tests"
 task :test do
   exec "rspec --color"
 end
+
+desc "Generate docs"
+task :rdoc do
+  exec "rdoc --ri *.c lib/*.rb"
+  exec "rdoc"
+end

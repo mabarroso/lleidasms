@@ -1,5 +1,9 @@
 # Lleidasms Change Log
 
+## Lleidasms 1.1.0
+- Client class features
+  * send SMS
+
 ## Lleidasms 1.0.2
 
 - command-line demo files
