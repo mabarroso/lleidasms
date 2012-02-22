@@ -127,9 +127,9 @@ module Lleidasms
     private
     def add_addressee_results()
 puts "-- #{@response_cmd}"
+      @addressees_rejected = @response_cmd_hash['REJDST'] if @response_cmd_hash['REJDST']
+      @addressees_accepted = @response_cmd_hash['OK'] if @response_cmd_hash['OK']
       return false if @response_cmd.eql? 'NOOK'
-      @addressees_rejected = @response_args if @response_cmd.eql? 'REJDST'
-      @addressees_accepted = @response_args if @response_cmd.eql? 'OK'
       return true
     end
 
@@ -142,10 +142,12 @@ puts "-- #{@response_cmd}"
       	@response_label = label
       	@response_cmd   = cmd
       	@response_args  = args
+      	@response_cmd_hash[cmd] = args
       end
     end
 
     def wait_for(label)
+      @response_cmd_hash = {}
       @wait_for_label = label.to_s
       @wait = true
       t = Time.new
