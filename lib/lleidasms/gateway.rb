@@ -168,6 +168,7 @@ module Lleidasms
       $writer[label_response + " MSG #{message}"]
     end
 
+    #  *data* file contenten base64 encoded
     # Available types:
     #  * :jpeg				image JPEG
     #  * :gif					image GIF
@@ -178,30 +179,31 @@ module Lleidasms
     #  * :gpp					video 3GP
     #  * :java				application JAVA
     #  * :symbian			application Symbian
-    def cmd_filemsg(type, message, label_response = new_label)
-			mimetype = case type
-				when :jpeg
-					'image/jpg'
-				when :gif
-					'image/gif'
-				when :midi
-					'audio/midi'
-				when :sp_midi
-					'audio/sp-midi'
-				when :amr
-					'audio/amr'
-				when :mp3
-					'audio/mpeg'
-				when :gpp
-					'video/3gpp'
-				when :java
-					'application/java-archive'
-				when :symbian
-					'application/vnd.symbian.instal'
-				else
-			  	return false
-			end
-      $writer[label_response + " FILEMSG #{mimetype} #{message}"]
+    def cmd_filemsg(type, data, label_response = new_label)
+			mime = mimetype type
+      $writer[label_response + " FILEMSG #{mime} #{data}"] if mime
+    end
+
+    #  *data* file contenten base64 encoded
+    #  *title* Information title before downloading content
+    #  *message* Information text before downloading content
+    # Available types:
+    #  * :jpeg				image JPEG
+    #  * :gif					image GIF
+    #  * :midi				polyfonic melody MIDI
+    #  * :sp_midi			polyfonic melody SP-MIDI
+    #  * :amr					sound AMR
+    #  * :mp3					sound MP3
+    #  * :gpp					video 3GP
+    #  * :java				application JAVA
+    #  * :symbian			application Symbian
+    def cmd_mmsmsg(type, data, title, message, label_response = new_label)
+			mime = mimetype type
+      $writer[label_response + " MMSMSG #{mime} #{data} #{title}|#{message}"] if mime
+    end
+
+    def cmd_envia(label_response = new_label)
+      $writer[label_response + " ENVIA"]
     end
     # CMD Envios MT end
 
@@ -260,5 +262,31 @@ module Lleidasms
 				do_event(:all)
 			end
 		end
+
+		private
+		def mimetype type
+      case type
+				when :jpeg
+					'image/jpg'
+				when :gif
+					'image/gif'
+				when :midi
+					'audio/midi'
+				when :sp_midi
+					'audio/sp-midi'
+				when :amr
+					'audio/amr'
+				when :mp3
+					'audio/mpeg'
+				when :gpp
+					'video/3gpp'
+				when :java
+					'application/java-archive'
+				when :symbian
+					'application/vnd.symbian.instal'
+				else
+			  	false
+			end
+	  end
   end
 end

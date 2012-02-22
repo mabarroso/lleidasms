@@ -132,7 +132,7 @@ module Lleidasms
 		end
 
     # Set file content (base64 encded) as message for the massive send list
-    # Usually MIDI, MP3, AMR and java files
+    #  *data* file contenten base64 encoded
     # Available types:
     #  * :jpeg				image JPEG
     #  * :gif					image GIF
@@ -143,10 +143,41 @@ module Lleidasms
     #  * :gpp					video 3GP
     #  * :java				application JAVA
     #  * :symbian			application Symbian
-		def filemsg(type, message, wait = true)
-			cmd_filemsg type, message
+		def filemsg(type, data, wait = true)
+			cmd_filemsg type, data
 			return false unless wait_for(last_label) if wait
 			return @response_args
+		end
+
+    # Set file content (base64 encded) as message for the massive send list
+    #  *data* file contenten base64 encoded
+    #  *title* Information title before downloading content
+    #  *message* Information text before downloading content
+    # Available types:
+    #  * :jpeg				image JPEG
+    #  * :gif					image GIF
+    #  * :midi				polyfonic melody MIDI
+    #  * :sp_midi			polyfonic melody SP-MIDI
+    #  * :amr					sound AMR
+    #  * :mp3					sound MP3
+    #  * :gpp					video 3GP
+    #  * :java				application JAVA
+    #  * :symbian			application Symbian
+		def mmsmsg(type, data, title, message, wait = true)
+			cmd_mmsmsg type, data, title, message
+			return false unless wait_for(last_label) if wait
+			return @response_args
+		end
+
+    # Send message/file to the massive send list
+		def send_all(wait = true)
+      cmd_envia
+
+			if wait
+				wait_for(last_label)
+				return false if @response_cmd.eql? 'NOOK'
+				return "#{@response_args[0]}.#{@response_args[1]}".to_f
+			end
 		end
 
     private
