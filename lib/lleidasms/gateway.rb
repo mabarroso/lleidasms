@@ -168,8 +168,40 @@ module Lleidasms
       $writer[label_response + " MSG #{message}"]
     end
 
-    def cmd_filemsg(message, label_response = new_label)
-      $writer[label_response + " FILEMSG #{message}"]
+    # Available types:
+    #  * :jpeg				image JPEG
+    #  * :gif					image GIF
+    #  * :midi				polyfonic melody MIDI
+    #  * :sp_midi			polyfonic melody SP-MIDI
+    #  * :amr					sound AMR
+    #  * :mp3					sound MP3
+    #  * :gpp					video 3GP
+    #  * :java				application JAVA
+    #  * :symbian			application Symbian
+    def cmd_filemsg(type, message, label_response = new_label)
+			mimetype = case type
+				when :jpeg
+					'image/jpg'
+				when :gif
+					'image/gif'
+				when :midi
+					'audio/midi'
+				when :sp_midi
+					'audio/sp-midi'
+				when :amr
+					'audio/amr'
+				when :mp3
+					'audio/mpeg'
+				when :gpp
+					'video/3gpp'
+				when :java
+					'application/java-archive'
+				when :symbian
+					'application/vnd.symbian.instal'
+				else
+			  	return false
+			end
+      $writer[label_response + " FILEMSG #{mimetype} #{message}"]
     end
     # CMD Envios MT end
 

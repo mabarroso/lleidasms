@@ -133,8 +133,18 @@ module Lleidasms
 
     # Set file content (base64 encded) as message for the massive send list
     # Usually MIDI, MP3, AMR and java files
-		def filemsg(message, wait = true)
-			cmd_filemsg message
+    # Available types:
+    #  * :jpeg				image JPEG
+    #  * :gif					image GIF
+    #  * :midi				polyfonic melody MIDI
+    #  * :sp_midi			polyfonic melody SP-MIDI
+    #  * :amr					sound AMR
+    #  * :mp3					sound MP3
+    #  * :gpp					video 3GP
+    #  * :java				application JAVA
+    #  * :symbian			application Symbian
+		def filemsg(type, message, wait = true)
+			cmd_filemsg type, message
 			return false unless wait_for(last_label) if wait
 			return @response_args
 		end

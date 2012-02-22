@@ -1,8 +1,8 @@
 ﻿#Lleidasms
-A [Lleida.net](http://lleida.net/) SMS gateway for Ruby.
+  A [Lleida.net](http://lleida.net/) SMS gateway for Ruby.
 
 #Description
-Receive and send standar and premium SMS/MMS using [Lleida.net](http://lleida.net/) services.
+  Receive and send standar and premium SMS/MMS using [Lleida.net](http://lleida.net/) services.
 
 ##Features
   - client class
@@ -27,13 +27,13 @@ Receive and send standar and premium SMS/MMS using [Lleida.net](http://lleida.ne
 More info in [Lleida.net Developers Network](http://soporte.lleida.net/?p=35)
 
 #Installation
-##From the command line.
+##From the command line
 
 ```shell
   gem install lleidasms
 ```
 
-##Using Gemfile.
+##Using Gemfile
 
 1 Add to your application Gemfile
 
