@@ -244,6 +244,10 @@ module Lleidasms
       $writer[label_response + " ACUSEOFF"]
     end
 
+    def cmd_acuseack id, label_response = new_label
+      $writer[label_response + " ACUSEACK #{id}"]
+    end
+
     # CMD Recepcion SMS (no premium) end
 
     # CMD Recepcion SMS (premium)
@@ -278,6 +282,8 @@ module Lleidasms
         when 'FUSUBMITOK'
         when 'WAPLINKOK'
         when 'REJDST'
+        when 'ACUSE'
+        when 'ACUSEACKR'
 
         # CMD Recepcion SMS (no premium)
         when 'INCOMINGMO'

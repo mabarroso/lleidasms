@@ -9,12 +9,12 @@
   - client class
   - gateway superclass for new client implementations
 
-##Protocol implementation (65%)
+##Protocol implementation (70%)
   - Comandos Generales (100%)
   	* implemented: saldo, ping, pong, infonum, tarifa, quit.
-  - Comandos para el envíıo de MT simples (87%)
-  	* implemented: submit, bsubmit, usubmit, fsubmit, fbsubmit, fusubmit, dsubmit, dbsubmit, dusubmit, dfsubmit, dbfsubmit, dfusubmit, waplink, dst, msg, filemsg, mmsmsg, envia, acuseon, acuseoff
-  	* TODO: acuse, acuseack, trans.
+  - Comandos para el envíıo de MT simples (96%)
+  	* implemented: submit, bsubmit, usubmit, fsubmit, fbsubmit, fusubmit, dsubmit, dbsubmit, dusubmit, dfsubmit, dbfsubmit, dfusubmit, waplink, dst, msg, filemsg, mmsmsg, envia, acuseon, acuseoff, acuse, acuseack
+  	* TODO: trans
   - Comandos para la recepcion de SMS (NO Premium) (0%)
   	* implemented: none
   	* TODO: allowanswer, incomingmo, incomingmoack.

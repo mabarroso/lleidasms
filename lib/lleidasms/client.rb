@@ -4,27 +4,29 @@ require "gateway"
 module Lleidasms
   class Client < Lleidasms::Gateway
     event :all, :new_event
+    event :acuse, :new_acuse
 
     attr_accessor :timeout
 
-    def connect(user, password, timeout = 2.4)
+    def connect user, password, timeout = 2.4
       super()
       listener
-      cmd_login(user, password)
+      cmd_login user, password
       self.timeout= timeout
+      @acuse = []
     end
 
-    def saldo()
+    def saldo
       cmd_saldo
-      return false unless wait_for(last_label)
+      return false unless wait_for last_label
       return @response_args[0]
     end
 
     # *number*
     #   The telephone number
-    def tarifa(number)
+    def tarifa number
       cmd_tarifa number
-      return false unless wait_for(last_label)
+      return false unless wait_for last_label
       return @response_args
     end
 
@@ -41,7 +43,7 @@ module Lleidasms
     #       * :binary message is in base64 encoded
     #       * :base64 message is in base64 encoded
     #       * :unicode message is in unicode and base64 encoded
-    def send_sms(number, message, opts={})
+    def send_sms number, message, opts={}
       wait       =!(opts[:nowait] || false)
       encode    =  opts[:encode] || :ascii
       sender    =  opts[:sender] || false
@@ -73,7 +75,7 @@ module Lleidasms
       cmd_raw "#{date}#{custom}#{encode}SUBMIT", "#{datetime}#{sender}#{number} #{message}"
 
       if wait
-        wait_for(last_label)
+        wait_for last_label
         return false if @response_cmd.eql? 'NOOK'
         return "#{@response_args[0]}.#{@response_args[1]}".to_f
       end
@@ -85,11 +87,11 @@ module Lleidasms
     #   The URL to content. Usually a image, tone or application
     # *message*
     #   Information text before downloading content
-    def send_waplink(number, url, message)
+    def send_waplink number, url, message
       cmd_waplink number, url, message
 
       if wait
-        wait_for(last_label)
+        wait_for last_label
         return false if @response_cmd.eql? 'NOOK'
         return "#{@response_args[0]}.#{@response_args[1]}".to_f
       end
@@ -101,18 +103,18 @@ module Lleidasms
     # Return TRUE if ok
     #   - see accepted in *last_addressees_accepted*
     #   - see rejected in *last_addressees_rejected*
-    def add_addressee(addressees, wait = true)
+    def add_addressee addressees, wait = true
       @addressees_accepted = false
       @addressees_rejected = false
       if addressees.kind_of?(Array)
-        addressees = addressees.join(' ')
+        addressees = addressees.join ' '
       end
 
       cmd_dst addressees
 
       while wait && !@addressees_accepted
-        wait_for(last_label)
-        return false if !add_addressee_results()
+        wait_for last_label
+        return false if !add_addressee_results
       end
     end
 
@@ -125,7 +127,7 @@ module Lleidasms
     end
 
     # Set the message for the massive send list
-    def msg(message, wait = true)
+    def msg message, wait = true
       cmd_msg message
       return false unless wait_for(last_label) if wait
       return @response_args
@@ -143,7 +145,7 @@ module Lleidasms
     #  * :gpp         video 3GP
     #  * :java        application JAVA
     #  * :symbian     application Symbian
-    def filemsg(type, data, wait = true)
+    def filemsg type, data, wait = true
       cmd_filemsg type, data
       return false unless wait_for(last_label) if wait
       return @response_args
@@ -163,18 +165,18 @@ module Lleidasms
     #  * :gpp         video 3GP
     #  * :java        application JAVA
     #  * :symbian     application Symbian
-    def mmsmsg(type, data, title, message, wait = true)
+    def mmsmsg type, data, title, message, wait = true
       cmd_mmsmsg type, data, title, message
       return false unless wait_for(last_label) if wait
       return @response_args
     end
 
     # Send message/file to the massive send list
-    def send_all(wait = true)
+    def send_all wait = true
       cmd_envia
 
       if wait
-        wait_for(last_label)
+        wait_for last_label
         return false if @response_cmd.eql? 'NOOK'
         return "#{@response_args[0]}.#{@response_args[1]}".to_f
       end
@@ -212,15 +214,43 @@ module Lleidasms
       true
     end
 
+    def acuse?
+      @acuse.count > 0
+    end
+
+    # Return hash or false
+    #   - :id
+    #   - :destino
+    #   - :timestamp_acuse
+    #   - :estado
+    #       * :acked     Entregado a la operadora correctamente.
+    #       * :buffred   Teléfono apagado o fuera de cobertura.
+    #       * :failed    El mensaje no se puede entregar en destino.
+    #       * :delivrd   El mesaje ha sido entregado en destino.
+    #   - :timestamp_envio
+    #   - :texto
+    def acuse
+      return false unless acuse?
+      row = @acuse.shift
+      return {
+          id: row[0],
+          destino: row[1],
+          timestamp_acuse: row[2],
+          estado: row[3].to_sym,
+          timestamp_envio: row[4],
+          texto: row[5] || ''
+        }
+    end
+
     private
-    def add_addressee_results()
+    def add_addressee_results
       @addressees_rejected = @response_cmd_hash['REJDST'] if @response_cmd_hash['REJDST']
       @addressees_accepted = @response_cmd_hash['OK'] if @response_cmd_hash['OK']
       return false if @response_cmd.eql? 'NOOK'
       return true
     end
 
-    def new_event(label, cmd, args)
+    def new_event label, cmd, args
       @event_label = label
       @event_cmd   = cmd
       @event_args  = args
@@ -233,7 +263,7 @@ module Lleidasms
       end
     end
 
-    def wait_for(label)
+    def wait_for label
       @response_cmd_hash = {}
       @wait_for_label = label.to_s
       @wait = true
@@ -245,5 +275,9 @@ module Lleidasms
       return true
     end
 
+    def new_acuse label, cmd, args
+      @acuse << args
+      cmd_acuseack args[0]
+    end
   end
 end
