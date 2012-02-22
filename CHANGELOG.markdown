@@ -5,6 +5,7 @@
   * send SMS text plain (ASCII), unicode and binary (base64) format
   * send SMS waplink
   * massive send list
+  * acknowledge receipt
 
 ## Lleidasms 1.0.2
 
