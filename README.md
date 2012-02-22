@@ -9,21 +9,20 @@
   - client class
   - gateway superclass for new client implementations
 
-##Protocol implementation (70%)
+##Protocol implementation (73%)
   - Comandos Generales (100%)
-  	* implemented: saldo, ping, pong, infonum, tarifa, quit.
-  - Comandos para el envíıo de MT simples (96%)
-  	* implemented: submit, bsubmit, usubmit, fsubmit, fbsubmit, fusubmit, dsubmit, dbsubmit, dusubmit, dfsubmit, dbfsubmit, dfusubmit, waplink, dst, msg, filemsg, mmsmsg, envia, acuseon, acuseoff, acuse, acuseack
-  	* TODO: trans
+  	* implemented: saldo, ping, pong, infonum, tarifa, quit
+  - Comandos para el envíıo de MT simples (100%)
+  	* implemented: submit, bsubmit, usubmit, fsubmit, fbsubmit, fusubmit, dsubmit, dbsubmit, dusubmit, dfsubmit, dbfsubmit, dfusubmit, waplink, dst, msg, filemsg, mmsmsg, envia, acuseon, acuseoff, acuse, acuseack, trans
   - Comandos para la recepcion de SMS (NO Premium) (0%)
   	* implemented: none
-  	* TODO: allowanswer, incomingmo, incomingmoack.
+  	* TODO: allowanswer, incomingmo, incomingmoack
   - Comandos para la recepcion de SMS (Premium) (0%)
   	* implemented: none
-  	* TODO: deliver, resp, bresp, waplinkresp.
+  	* TODO: deliver, resp, bresp, waplinkresp
   - Comandos para la resolucion de MSIDSN (0%)
   	* implemented: none
-  	* TODO: checkall, rcheckall, checknetwork, rchecknetwork.
+  	* TODO: checkall, rcheckall, checknetwork, rchecknetwork
 
 More info in [Lleida.net Developers Network](http://soporte.lleida.net/?p=35)
 

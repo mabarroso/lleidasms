@@ -223,10 +223,10 @@ module Lleidasms
     #   - :destino
     #   - :timestamp_acuse
     #   - :estado
-    #       * :acked     Entregado a la operadora correctamente.
-    #       * :buffred   Teléfono apagado o fuera de cobertura.
-    #       * :failed    El mensaje no se puede entregar en destino.
-    #       * :delivrd   El mesaje ha sido entregado en destino.
+    #       * :acked     Entregado a la operadora correctamente
+    #       * :buffred   Telefono apagado o fuera de cobertura
+    #       * :failed    El mensaje no se puede entregar en destino
+    #       * :delivrd   El mesaje ha sido entregado en destino
     #   - :timestamp_envio
     #   - :texto
     def acuse
@@ -240,6 +240,35 @@ module Lleidasms
           timestamp_envio: row[4],
           texto: row[5] || ''
         }
+    end
+
+    # - wait: (default false) no wait for response
+    # - action
+    #     * :begin
+    #     * :end
+    #     * :abort
+    def trans action, wait = true
+      return false unless cmd_trans action
+      if wait
+        wait_for last_label
+        return false if @response_cmd.eql? 'NOOK'
+        return false if @response_args[1].eql? 'NOOK'
+        return true if @response_args[0].eql? 'INICIAR'
+        return true if @response_args[0].eql? 'ABORTAR'
+        return "#{@response_args[2]}.#{@response_args[3]}".to_f
+      end
+    end
+
+    def trans_begin wait = true
+      trans :begin, wait
+    end
+
+    def trans_end wait = true
+      trans :end, wait
+    end
+
+    def trans_abort wait = true
+      trans :abort, wait
     end
 
     private

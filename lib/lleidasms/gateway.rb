@@ -248,6 +248,23 @@ module Lleidasms
       $writer[label_response + " ACUSEACK #{id}"]
     end
 
+    # - action
+    #     * :begin
+    #     * :end
+    #     * :abort
+    def cmd_trans action, label_response = new_label
+      type = case action
+        when :begin
+          'INICIAR'
+        when :end
+          'FIN'
+        when :abort
+          'ABORTAR'
+        else
+          return false
+      end
+      $writer[label_response + " TRANS #{type}"]
+    end
     # CMD Recepcion SMS (no premium) end
 
     # CMD Recepcion SMS (premium)
@@ -284,7 +301,7 @@ module Lleidasms
         when 'REJDST'
         when 'ACUSE'
         when 'ACUSEACKR'
-
+        when 'RTRANS'
         # CMD Recepcion SMS (no premium)
         when 'INCOMINGMO'
 

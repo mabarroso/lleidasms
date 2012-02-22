@@ -6,6 +6,7 @@
   * send SMS waplink
   * massive send list
   * acknowledge receipt (acuse)
+  * trans
 
 ## Lleidasms 1.0.2
 
