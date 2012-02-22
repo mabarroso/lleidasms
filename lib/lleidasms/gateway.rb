@@ -163,6 +163,14 @@ module Lleidasms
     def cmd_dst(numbers, label_response = new_label)
       $writer[label_response + " DST #{numbers}"]
     end
+
+    def cmd_msg(message, label_response = new_label)
+      $writer[label_response + " MSG #{message}"]
+    end
+
+    def cmd_filemsg(message, label_response = new_label)
+      $writer[label_response + " FILEMSG #{message}"]
+    end
     # CMD Envios MT end
 
     # CMD Recepcion SMS (no premium)

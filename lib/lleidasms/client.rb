@@ -124,9 +124,23 @@ module Lleidasms
       return @addressees_rejected
     end
 
+    # Set the message for the massive send list
+		def msg(message, wait = true)
+			cmd_msg message
+			return false unless wait_for(last_label) if wait
+			return @response_args
+		end
+
+    # Set file content (base64 encded) as message for the massive send list
+    # Usually MIDI, MP3, AMR and java files
+		def filemsg(message, wait = true)
+			cmd_filemsg message
+			return false unless wait_for(last_label) if wait
+			return @response_args
+		end
+
     private
     def add_addressee_results()
-puts "-- #{@response_cmd}"
       @addressees_rejected = @response_cmd_hash['REJDST'] if @response_cmd_hash['REJDST']
       @addressees_accepted = @response_cmd_hash['OK'] if @response_cmd_hash['OK']
       return false if @response_cmd.eql? 'NOOK'

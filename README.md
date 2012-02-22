@@ -1,18 +1,19 @@
-﻿# Lleidasms
+﻿#Lleidasms
 A [Lleida.net](http://lleida.net/) SMS gateway for Ruby.
 
-# Description
+#Description
 Receive and send standar and premium SMS/MMS using [Lleida.net](http://lleida.net/) services.
 
 ##Features
   - client class
   - gateway superclass for new client implementations
-##Protocol implementation (50%)
+
+##Protocol implementation (55%)
   - Comandos Generales (100%)
   	* implemented: saldo, ping, pong, infonum, tarifa, quit.
-  - Comandos para el envíıo de MT simples (60%)
-  	* implemented: submit, bsubmit, usubmit, fsubmit, fbsubmit, fusubmit, dsubmit, dbsubmit, dusubmit, dfsubmit, dbfsubmit, dfusubmit, waplink, dst
-  	* TODO: msg, filemsg, mmsmsg, envia, acuseon, acuseoff, acuse, acuseack, trans.
+  - Comandos para el envíıo de MT simples (70%)
+  	* implemented: submit, bsubmit, usubmit, fsubmit, fbsubmit, fusubmit, dsubmit, dbsubmit, dusubmit, dfsubmit, dbfsubmit, dfusubmit, waplink, dst, msg, filemsg
+  	* TODO: mmsmsg, envia, acuseon, acuseoff, acuse, acuseack, trans.
   - Comandos para la recepcion de SMS (NO Premium) (0%)
   	* implemented: none
   	* TODO: allowanswer, incomingmo, incomingmoack.
@@ -22,6 +23,8 @@ Receive and send standar and premium SMS/MMS using [Lleida.net](http://lleida.ne
   - Comandos para la resolucion de MSIDSN (0%)
   	* implemented: none
   	* TODO: checkall, rcheckall, checknetwork, rchecknetwork.
+
+More info in [Lleida.net Developers Network](http://soporte.lleida.net/?p=35)
 
 #Installation
 ##From the command line.
