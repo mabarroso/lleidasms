@@ -48,6 +48,8 @@ gem 'lleidasms'
 
 # Examples
 ## Demo
+From the command line
+
 ```shell
   lleidasms YOUR_USER YOUR_PASSWORD
 ```

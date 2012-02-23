@@ -6,8 +6,9 @@ module Lleidasms
     event :all, :new_event
     event :acuse, :new_acuse
     event :incomingmo, :new_incomingmo
+    debug :all, :debugger
 
-    attr_accessor :timeout
+    attr_accessor :timeout, :debug
 
     def connect user, password, timeout = 2.4
       super()
@@ -16,6 +17,11 @@ module Lleidasms
       self.timeout= timeout
       @acuse = []
       @incomingmo = []
+      @debug = false
+    end
+
+    def debugger line
+      puts line if @debug
     end
 
     def saldo
@@ -24,7 +30,7 @@ module Lleidasms
       return @response_args[0]
     end
 
-    # *number*
+    # number
     #   The telephone number
     def tarifa number
       cmd_tarifa number
@@ -32,11 +38,11 @@ module Lleidasms
       return @response_args
     end
 
-    # *number*
+    # number
     #   The telephone number
-    # *message*
+    # message
     #   The string to send
-    # *opts*
+    # opts
     #   - nowait: (default false) no wait for response
     #   - sender: The sender telephone number
     #   - date: Date and time to send message in format YYYYMMDDhhmm[+-]ZZzz
@@ -83,11 +89,11 @@ module Lleidasms
       end
     end
 
-    # *number*
+    # number
     #   The telephone number
-    # *url*
+    # url
     #   The URL to content. Usually a image, tone or application
-    # *message*
+    # message
     #   Information text before downloading content
     def send_waplink number, url, message
       cmd_waplink number, url, message
@@ -136,7 +142,7 @@ module Lleidasms
     end
 
     # Set file content (base64 encded) as message for the massive send list
-    #  *data* file contenten base64 encoded
+    #  data file contenten base64 encoded
     # Available types:
     #  * :jpeg        image JPEG
     #  * :gif         image GIF

@@ -4,6 +4,8 @@ require "io/wait"
 
 module Lleidasms
   class Gateway
+    $callbacks = {}
+
     # Client
     def initialize host = 'sms.lleida.net', port = 2048
       @host = host
@@ -21,7 +23,7 @@ module Lleidasms
       end
       $writer      = lambda do |buffer|
         $server.puts "#{buffer}\r\n"
-        puts "<#{buffer}\r\n"
+        do_debug :out, "<#{buffer}"
         buffer.replace ''
       end
     end
@@ -60,33 +62,20 @@ module Lleidasms
     end
     # Client end
 
-    # Callbacks
-    $callbacks = {}
-
-     def self.event name, method_name
+    def self.event name, method_name
        $callbacks[name] = [] unless $callbacks[name]
       $callbacks[name] << method_name
     end
 
-    def do_event name
-      run_event name.to_sym, @label, @cmd, @args
+    # Available types:
+    #  * :in
+    #  * :out
+    #  * :all
+    def self.debug type, method_name
+      name = "debug_#{type.to_s}"
+      $callbacks[name] = [] unless $callbacks[name]
+      $callbacks[name] << method_name
     end
-
-    def run_event name, *args
-      run_event_for name.to_sym, self, *args
-    end
-
-    def run_event_for name, scope, *args
-      return unless $callbacks[name.to_sym]
-      $callbacks[name.to_sym].each do |callback|
-        if callback.kind_of? Symbol
-          scope.send callback, *args
-        else
-          scope.instance_exec *args, &callback
-        end
-      end
-    end
-    # Callbacks end
 
     def new_label
       @my_label += 1
@@ -273,7 +262,7 @@ module Lleidasms
     def parser
       until $input_buffer.empty?
         line = $input_buffer.shift
-        puts ">#{line}\r\n"
+        do_debug :in, ">#{line}"
         @args = line.split ' '
         @label = @args.shift
         @cmd   = @args.shift
@@ -316,6 +305,32 @@ module Lleidasms
     end
 
     private
+    def do_debug type, line
+      name = "debug_#{type.to_s}".to_sym
+puts "#{name} line      "
+      run_event_for name, self, line
+      run_event_for 'debug_all', self, line
+    end
+
+    def do_event name
+      run_event name.to_sym, @label, @cmd, @args
+    end
+
+    def run_event name, *args
+      run_event_for name.to_sym, self, *args
+    end
+
+    def run_event_for name, scope, *args
+      return unless $callbacks[name.to_sym]
+      $callbacks[name.to_sym].each do |callback|
+        if callback.kind_of? Symbol
+          scope.send callback, *args
+        else
+          scope.instance_exec *args, &callback
+        end
+      end
+    end
+
     def mimetype type
       case type
         when :jpeg
