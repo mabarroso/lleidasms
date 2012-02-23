@@ -7,6 +7,7 @@
   * massive send list
   * acknowledge receipt (acuse)
   * trans
+  * receive standar SMS no premium
 
 ## Lleidasms 1.0.2
 

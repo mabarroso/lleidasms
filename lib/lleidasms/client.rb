@@ -5,6 +5,7 @@ module Lleidasms
   class Client < Lleidasms::Gateway
     event :all, :new_event
     event :acuse, :new_acuse
+    event :incomingmo, :new_incomingmo
 
     attr_accessor :timeout
 
@@ -14,6 +15,7 @@ module Lleidasms
       cmd_login user, password
       self.timeout= timeout
       @acuse = []
+      @incomingmo = []
     end
 
     def saldo
@@ -218,6 +220,10 @@ module Lleidasms
       @acuse.count > 0
     end
 
+    def incomingmo?
+      @incomingmo.count > 0
+    end
+
     # Return hash or false
     #   - :id
     #   - :destino
@@ -271,6 +277,29 @@ module Lleidasms
       trans :abort, wait
     end
 
+    def allowanswer on = true, wait = true
+      cmd_allowanswer on
+      wait_for last_label if wait
+    end
+
+    # Return hash or false
+    #   - :id
+    #   - :timestamp
+    #   - :remitente
+    #   - :destino
+    #   - :texto
+    def incomingmo
+      return false unless incomingmo?
+      row = @incomingmo.shift
+      return {
+          id: row.shift,
+          timestamp: row.shift,
+          remitente: row.shift,
+          destino: row.shift,
+          texto: row.join(' ')
+        }
+    end
+
     private
     def add_addressee_results
       @addressees_rejected = @response_cmd_hash['REJDST'] if @response_cmd_hash['REJDST']
@@ -308,5 +337,11 @@ module Lleidasms
       @acuse << args
       cmd_acuseack args[0]
     end
+
+    def new_incomingmo label, cmd, args
+      @incomingmo << args
+      cmd_incomingmoack args[0]
+    end
+
   end
 end

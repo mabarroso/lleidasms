@@ -310,7 +310,7 @@ module Lleidasms
         else
           # unknow
         end
-        do_event @cmd
+        do_event @cmd.downcase
         do_event :all
       end
     end
