@@ -1,5 +1,10 @@
 # Lleidasms Change Log
 
+## Lleidasms 1.1.2
+- Debugger
+- Client class features
+  * Debug
+
 ## Lleidasms 1.1.0
 - Client class features
   * send SMS text plain (ASCII), unicode and binary (base64) format
@@ -10,7 +15,6 @@
   * receive standar SMS no premium
 
 ## Lleidasms 1.0.2
-
 - command-line demo files
 - replaced rdoc by md
 - changelog file

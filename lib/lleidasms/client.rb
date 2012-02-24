@@ -21,7 +21,7 @@ module Lleidasms
     end
 
     def debugger line
-      puts line if @debug
+      puts line
     end
 
     def saldo

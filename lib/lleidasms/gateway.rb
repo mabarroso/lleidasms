@@ -72,7 +72,7 @@ module Lleidasms
     #  * :out
     #  * :all
     def self.debug type, method_name
-      name = "debug_#{type.to_s}"
+      name = "debug_#{type.to_s}".to_sym
       $callbacks[name] = [] unless $callbacks[name]
       $callbacks[name] << method_name
     end
@@ -307,7 +307,6 @@ module Lleidasms
     private
     def do_debug type, line
       name = "debug_#{type.to_s}".to_sym
-puts "#{name} line      "
       run_event_for name, self, line
       run_event_for 'debug_all', self, line
     end
