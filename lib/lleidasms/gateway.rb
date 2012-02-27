@@ -297,7 +297,7 @@ module Lleidasms
         # CMD Recepcion SMS (premium)
 
         else
-          # unknow
+          do_event :unknow
         end
         do_event @cmd.downcase
         do_event :all

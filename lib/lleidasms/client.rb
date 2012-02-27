@@ -6,6 +6,7 @@ module Lleidasms
     event :all, :new_event
     event :acuse, :new_acuse
     event :incomingmo, :new_incomingmo
+    event :unknow, :new_unknow
     debug :all, :debugger
 
     attr_accessor :timeout, :debug
@@ -17,6 +18,7 @@ module Lleidasms
       self.timeout= timeout
       @acuse = []
       @incomingmo = []
+      @unknow = []
       @debug = false
     end
 
@@ -230,6 +232,10 @@ module Lleidasms
       @incomingmo.count > 0
     end
 
+    def unknow?
+      @unknow.count > 0
+    end
+
     # Return hash or false
     #   - :id
     #   - :destino
@@ -252,6 +258,12 @@ module Lleidasms
           timestamp_envio: row[4],
           texto: row[5] || ''
         }
+    end
+
+    # Return array or false
+    def unknow
+      return false unless unknow?
+      @unknow.shift
     end
 
     # - wait: (default false) no wait for response
@@ -347,6 +359,11 @@ module Lleidasms
     def new_incomingmo label, cmd, args
       @incomingmo << args
       cmd_incomingmoack args[0]
+    end
+
+    def new_unknow label, cmd, args
+      args.unshift cmd
+      @unknow << args
     end
 
   end

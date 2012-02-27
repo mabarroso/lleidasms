@@ -98,5 +98,52 @@ or
 	end
 ```
 
+### Special method raw command
+Allow you to send to server any command not implemented.
+
+```ruby
+  cmd_raw 'PING', time
+```
+
+### Special event :unknow
+To detect unknow commands.
+```ruby
+  event :unknow, :new_unknow
+
+  def new_unknow label, cmd, args
+  end
+```
+
+### Enabling debug
+Use debug to capture debug events at :in, :out or :all messages
+```ruby
+	class SMS < Lleidasms::Gateway
+	  debug :all, :debugger
+	  debug :in, :debugger_in
+	  debug :out, :debugger_out
+
+    def debugger line
+      puts line
+    end
+
+    def debugger_in line
+      puts line
+    end
+
+    def debugger_out line
+      puts line
+    end
+	end
+
+	sms = SMS.new
+	sms.connect
+	sms.listener
+	sms.cmd_login <YOUR_USER>, <YOUR_PASSWORD>
+
+	while sms.conected?
+		# Some tasks
+	end
+```
+
 # License
 Released under the MIT license: [http://www.opensource.org/licenses/MIT](http://www.opensource.org/licenses/MIT)

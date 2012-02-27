@@ -1,5 +1,8 @@
 # Lleidasms Change Log
 
+## Lleidasms 1.1.4
+- Unknow commands
+
 ## Lleidasms 1.1.2
 - Debugger
 - Client class features
