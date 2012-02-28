@@ -107,6 +107,7 @@ Allow you to send to server any command not implemented.
 
 ### Special event :unknow
 To detect unknow commands.
+
 ```ruby
   event :unknow, :new_unknow
 
@@ -116,6 +117,7 @@ To detect unknow commands.
 
 ### Enabling debug
 Use debug to capture debug events at :in, :out or :all messages
+
 ```ruby
 	class SMS < Lleidasms::Gateway
 	  debug :all, :debugger
