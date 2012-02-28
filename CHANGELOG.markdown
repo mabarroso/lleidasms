@@ -1,5 +1,8 @@
 # Lleidasms Change Log
 
+## Lleidasms 1.1.6
+- fix bug
+
 ## Lleidasms 1.1.4
 - Unknow commands
 
